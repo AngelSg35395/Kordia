@@ -4,3 +4,5 @@
 * {
     font-family: 'Figtree', cursive;
 }
+
+@custom-variant dark (&:where(.dark, .dark *));

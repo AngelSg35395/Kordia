@@ -3,7 +3,7 @@ import defaultImage from "@/Assets/default.webp"
 export default function CardSong() {
     return (
         <article className="flex flex-row gap-4 w-full h-22 rounded-lg p-2 bg-gray-100 dark:bg-gray-900">
-            <section className="w-20 h-full">
+            <section className="min-w-20 max-w-20 h-full">
                 <img
                     src={defaultImage}
                     alt="default"
@@ -11,15 +11,15 @@ export default function CardSong() {
                     draggable="false"
                 />
             </section>
-            <section className="flex flex-col">
-                <h3 className="text-gray-900 dark:text-gray-300 font-bold text-2xl">
+            <section className="flex flex-col sm:w-9/12 w-6/12">
+                <h3 className="text-gray-900 dark:text-gray-300 font-bold text-2xl line-clamp-1 w-full">
                     Titulo
                 </h3>
-                <p className="text-gray-400 dark:text-gray-400 text-md">
+                <p className="text-gray-400 dark:text-gray-400 text-md line-clamp-1 w-full max-w-7/12">
                     Autor
                 </p>
             </section>
-            <section className="flex items-center justify-end flex-auto p-2">
+            <section className="flex items-center justify-end p-2 flex-auto">
                 <button
                     type="button"
                     className="w-12 h-12 flex items-center justify-center p-2 rounded-full cursor-pointer bg-white dark:bg-gray-800"

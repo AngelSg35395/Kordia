@@ -12,7 +12,7 @@ from app.dependencies import get_db
 router = APIRouter(tags=["maintenance"])
 
 
-@router.get("/", response_model=HealthResponse)
+@router.get("/health", response_model=HealthResponse)
 async def health_check():
     """
     Health check endpoint

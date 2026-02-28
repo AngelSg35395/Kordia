@@ -121,11 +121,15 @@ class OfflineSongsRepository(BaseRepository):
     
     def _row_to_dict(self, row: tuple) -> Dict[str, Any]:
         """Convertir fila de base de datos a diccionario"""
+        ytid = row[0]
+        # Usamos la ruta local de la API para el thumbnail si está descargada
+        thumbnail = f"/offline/artwork/{ytid}" if row[5] else row[3]
+        
         return {
-            'ytid': row[0],
+            'ytid': ytid,
             'title': row[1],
             'artist': row[2],
-            'thumbnail': row[3],
+            'thumbnail': thumbnail,
             'audioPath': row[4],
             'artworkPath': row[5],
             'dateAdded': row[6],

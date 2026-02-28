@@ -42,11 +42,16 @@ class YouTubeService:
             if search_results and 'entries' in search_results:
                 for entry in search_results['entries']:
                     if entry:
+                        # Obtener miniatura (puede estar en 'thumbnail' o 'thumbnails')
+                        thumbnail = entry.get('thumbnail')
+                        if not thumbnail and entry.get('thumbnails'):
+                            thumbnail = entry['thumbnails'][-1].get('url')
+                            
                         results.append({
                             'ytid': entry.get('id'),
                             'title': entry.get('title'),
                             'artist': entry.get('uploader'),
-                            'thumbnail': entry.get('thumbnail'),
+                            'thumbnail': thumbnail,
                             'duration': entry.get('duration'),
                         })
             

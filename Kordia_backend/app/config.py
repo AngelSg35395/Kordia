@@ -36,6 +36,9 @@ class Settings(BaseSettings):
     # Directorios de datos
     data_dir: Path = Path("./Kordia_data")
     
+    # Directorio del frontend build (dist generado por Vite)
+    static_dir: Path = Path("./dist")
+    
     @property
     def audio_dir(self) -> Path:
         return self.data_dir / "audio"
@@ -76,3 +79,4 @@ class Settings(BaseSettings):
 
 # Instancia global de configuración
 settings = Settings()
+

@@ -110,6 +110,31 @@ async def serve_audio(
     )
 
 
+@router.get("/artwork/{ytid}")
+async def serve_artwork(
+    ytid: str,
+    storage_service: StorageService = Depends(get_storage_service)
+):
+    """
+    Servir archivo de imagen (thumbnail) offline
+    
+    - **ytid**: ID del video de YouTube
+    """
+    artwork_path = storage_service.get_artwork_path(ytid)
+    
+    if not artwork_path.exists():
+        # Fallback a una imagen por defecto o error 404
+        raise HTTPException(
+            status_code=404,
+            detail="Archivo de imagen no encontrado"
+        )
+    
+    return FileResponse(
+        artwork_path,
+        media_type="image/jpeg"
+    )
+
+
 @router.delete("/{ytid}")
 async def delete_offline_song(
     ytid: str,

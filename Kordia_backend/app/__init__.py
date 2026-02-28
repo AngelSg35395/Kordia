@@ -3,6 +3,8 @@ Kordia Backend - FastAPI Application Factory
 """
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
 from app.config import settings
 from app.database.connection import init_database
 from app.core.middleware import LoggingMiddleware
@@ -42,11 +44,31 @@ def create_app() -> FastAPI:
     # Agregar middleware personalizado
     app.add_middleware(LoggingMiddleware)
     
-    # Registrar routers
+    # Registrar routers de la API
     app.include_router(maintenance.router)
     app.include_router(search.router)
     app.include_router(stream.router)
     app.include_router(offline.router)
+    
+    # Servir el frontend React (build dist) si existe
+    static_dir = settings.static_dir
+    if static_dir.exists() and static_dir.is_dir():
+        # Montar los assets de Vite (js, css, imágenes, etc.)
+        assets_dir = static_dir / "assets"
+        if assets_dir.exists():
+            app.mount("/assets", StaticFiles(directory=str(assets_dir)), name="assets")
+        
+        # Catch-all: cualquier ruta que no sea de la API sirve index.html
+        # Esto permite que React Router maneje la navegación del lado del cliente
+        @app.get("/{full_path:path}", include_in_schema=False)
+        async def serve_spa(_full_path: str = ""):
+            index_file = static_dir / "index.html"
+            return FileResponse(str(index_file))
+        
+        print(f"✓ Frontend servido desde: {static_dir.absolute()}")
+    else:
+        print(f"⚠️  Carpeta dist no encontrada en: {static_dir.absolute()}")
+        print("   Ejecuta 'npm run build' en Kordia_Frontend/ para generar el build.")
     
     # Eventos de startup y shutdown
     @app.on_event("startup")
@@ -72,3 +94,4 @@ def create_app() -> FastAPI:
 
 # Crear instancia de la aplicación
 app = create_app()
+
